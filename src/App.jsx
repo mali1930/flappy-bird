@@ -20,21 +20,23 @@ const App = () => {
 
   useEffect(() => {
     let timeId;
-    if (gameHasStarted && birdPosition < 580) {
+    if (gameHasStarted) {
       timeId = setInterval(() => {
-        setBirdPosition((birdPosition) => birdPosition + GRAVITY);
+        setBirdPosition((birdPosition) =>
+          birdPosition < 580 ? birdPosition + GRAVITY : birdPosition
+        );
       }, 24);
     }
     return () => {
       clearInterval(timeId);
     };
-  }, [birdPosition, gameHasStarted]);
+  }, [gameHasStarted]);
 
   useEffect(() => {
     let obstacleId;
     if (gameHasStarted && obstacleLeft >= -OBSTACLE_WIDTH) {
       obstacleId = setInterval(() => {
-        setObstacleLeft((obstacleLeft) => obstacleLeft - 5);
+        setObstacleLeft((obstacleLeft) => obstacleLeft - 4);
       }, 24);
       return () => {
         clearInterval(obstacleId);
@@ -49,13 +51,10 @@ const App = () => {
   }, [gameHasStarted, obstacleLeft]);
 
   useEffect(() => {
-    const collidedWithTopObstacle =
-      birdPosition >= 0 && birdPosition < obstacleHeight;
+    const collidedWithTopObstacle = birdPosition < obstacleHeight;
     const collidedWithBottomObstacle =
-      birdPosition <= 500 && birdPosition >= 500 - bottomObstacleHeight;
-
+      birdPosition >= GAME_HEIGHT - bottomObstacleHeight;
     if (
-      obstacleLeft >= 0 &&
       obstacleLeft <= OBSTACLE_WIDTH &&
       (collidedWithTopObstacle || collidedWithBottomObstacle)
     ) {

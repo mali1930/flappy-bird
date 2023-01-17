@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+// import { bird } from "./assets/flappy-bird.png";
+// import { background } from "./assets/fb-game-background.png";
 
-const BIRD_SIZE = 20;
-const GAME_WIDTH = 500;
-const GAME_HEIGHT = 600;
+const BIRD_SIZE = 30;
+const GAME_WIDTH = 600;
+const GAME_HEIGHT = 608;
 const GRAVITY = 6;
 const JUMP_HEIGHT = 100;
 const OBSTACLE_WIDTH = 40;
@@ -41,12 +43,17 @@ const App = () => {
       return () => {
         clearInterval(obstacleId);
       };
-    } else {
+    } else if(gameHasStarted) {
       setObstacleLeft(GAME_WIDTH - OBSTACLE_WIDTH);
       setObstacleHeight(
         Math.floor(Math.random() * (GAME_HEIGHT - OBSTACLE_GAP))
       );
       setScore((score) => score + 1);
+    } else {
+      setObstacleLeft(GAME_WIDTH - OBSTACLE_WIDTH);
+      setObstacleHeight(
+        Math.floor(Math.random() * (GAME_HEIGHT - OBSTACLE_GAP))
+      );
     }
   }, [gameHasStarted, obstacleLeft]);
 
@@ -89,6 +96,7 @@ const App = () => {
           height={bottomObstacleHeight}
           left={obstacleLeft}
         />
+
         <Bird size={BIRD_SIZE} top={birdPosition} />
       </GameBox>
       <span>{score}</span>
@@ -100,11 +108,12 @@ export default App;
 
 const Bird = styled.div`
   position: absolute;
-  background-color: red;
+  background-image: url(${"/assets/flappy-bird.png"});
+  background-size: contain;
+  background-repeat: no-repeat;
   height: ${(props) => props.size}px;
   width: ${(props) => props.size}px;
   top: ${(props) => props.top}px;
-  border-radius: 50%;
 `;
 
 const Div = styled.div`
@@ -121,7 +130,10 @@ const Div = styled.div`
 const GameBox = styled.div`
   height: ${(props) => props.height}px;
   width: ${(props) => props.width}px;
-  background: blue;
+
+  background-image: url(${"/assets/fb-game-background.png"});
+  background-size: cover;
+  background-repeat: no-repeat;
   cursor: pointer;
   overflow: hidden;
 `;
